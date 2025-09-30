@@ -2,11 +2,11 @@
 __pycache__/
 *.py[codz]
 *$py.class
-ms_to_camelot/
 # C extensions
 *.so
 out
 out/
+.specstory
 .specstory/
 # Distribution / packaging
 .Python
