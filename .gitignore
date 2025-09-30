@@ -7,7 +7,7 @@ ms_to_camelot/
 *.so
 out
 out/
-
+.specstory/
 # Distribution / packaging
 .Python
 build/
