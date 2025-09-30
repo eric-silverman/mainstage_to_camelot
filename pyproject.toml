@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mainstage-to-camelot"
+version = "0.1.0"
+description = "Convert Apple MainStage .concert files to Camelot session JSON (songs/scenes/splits)"
+requires-python = ">=3.10"
+authors = [{name = "Eric", email = ""}]
+readme = "README.md"
+dependencies = []
+
+[project.scripts]
+ms-to-camelot = "ms_to_camelot.__main__:main"
+
