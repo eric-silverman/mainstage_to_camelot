@@ -27,9 +27,10 @@ Quick start
    - `out/MyShow.summary.txt` — Readable summary of songs/scenes/splits
 
 CLI options
-- `--flatten-sets`  Map every Patch as an independent Song (no Scenes)
-- `--dry-run`       Don’t write files; print a summary instead
-- `--verbose`       Print more details while parsing
+- `--flatten-sets`    Map every Patch as an independent Song (no Scenes)
+- `--collapse-scenes` Assume each Set is a Song; merge all Patches into one Scene
+- `--dry-run`         Don’t write files; print a summary instead
+- `--verbose`         Print more details while parsing
 
 Notes
 - If parsing fails, run with `--verbose` and share the `*.extracted.json` to refine mappings.
@@ -39,6 +40,7 @@ How it maps your show
 - Song vs Scene:
   - Non‑flattened: Set → Song, Patch → Scene, Channel Strip → Layer
   - Flattened (`--flatten-sets`): Patch → Song with a single Scene
+  - Collapsed (`--collapse-scenes`): Set → Song with a single Scene; all Patches merged into that Scene (no per‑patch scenes)
 - Layers: Only “instrument” strips are emitted as layers.
 - BPM: Treated as per‑song. When available it is attached to `song.metadata.bpm`.
 

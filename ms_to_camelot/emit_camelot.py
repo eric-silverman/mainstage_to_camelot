@@ -6,7 +6,12 @@ from typing import Any, Dict, List
 from .models import Concert, Set, Patch, ChannelStrip
 
 
-def build_camelot_session(concert: Concert, flatten_sets: bool, source_path: str) -> Dict[str, Any]:
+def build_camelot_session(
+    concert: Concert,
+    flatten_sets: bool,
+    source_path: str,
+    collapse_scenes: bool = False,
+) -> Dict[str, Any]:
     now_iso = datetime.now().isoformat()
     session: Dict[str, Any] = {
         "version": 1,
@@ -34,6 +39,28 @@ def build_camelot_session(concert: Concert, flatten_sets: bool, source_path: str
                     "metadata": meta,
                 }
                 session["songs"].append(song)
+    elif collapse_scenes:
+        # Map Set -> Song, merge all Patches into a single Scene (no per-patch scenes)
+        for s in concert.sets:
+            meta = dict(s.attributes) if isinstance(s.attributes, dict) else {}
+            # Pull BPM from the first patch that has it
+            bpm = None
+            for p in s.patches:
+                if isinstance(p.attributes, dict) and p.attributes.get("bpm") is not None:
+                    bpm = p.attributes.get("bpm")
+                    break
+            if bpm is not None:
+                meta["bpm"] = bpm
+
+            layers: List[Dict[str, Any]] = []
+            for p in s.patches:
+                for cs in p.channel_strips:
+                    if cs.kind == "instrument":
+                        layers.append(layer_from_strip(cs))
+
+            scene = {"name": s.name, "layers": layers, "metadata": {}}
+            song = {"name": s.name, "scenes": [scene], "metadata": meta}
+            session["songs"].append(song)
     else:
         # Map Set -> Song, Patch -> Scene; tempo belongs at Song level
         for s in concert.sets:

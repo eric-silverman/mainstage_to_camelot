@@ -16,6 +16,11 @@ def main():
     parser.add_argument("--input", "-i", required=True, help="Path to MainStage .concert bundle or ProjectData file")
     parser.add_argument("--output", "-o", default="out", help="Output directory (will be created if missing)")
     parser.add_argument("--flatten-sets", action="store_true", help="Map patches directly to songs (no scenes)")
+    parser.add_argument(
+        "--collapse-scenes",
+        action="store_true",
+        help="Assume each Set is a Song; merge all patches into a single scene",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Print summary only; do not write files")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose logs")
     args = parser.parse_args()
@@ -38,6 +43,7 @@ def main():
         concert,
         flatten_sets=args.flatten_sets,
         source_path=str(in_path.resolve()),
+        collapse_scenes=args.collapse_scenes,
     )
 
     summary_text = render_summary(concert, camelot)
@@ -61,4 +67,3 @@ def main():
         print(f"Wrote: {camelot_path}")
         print(f"Wrote: {extracted_path}")
         print(f"Wrote: {summary_path}")
-
